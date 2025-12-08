@@ -1,0 +1,54 @@
+title = "Welcome"
+url = "/"
+layout = "default"
+==
+{% page %}
+
+{# This is a comment #}
+
+<div class="container">
+    <h1>{{ this.page.title|app }}</h1>
+
+    {% component 'blogPosts' %}
+
+    {% for post in posts %}
+        <article>
+            <h2>{{ post.title }}</h2>
+            <div class="content">
+                {{ post.content|md }}
+            </div>
+            <img src="{{ post.image|media|resize(800, 600) }}" alt="{{ post.title }}">
+        </article>
+    {% endfor %}
+
+    {% if user %}
+        <p>Welcome, {{ user.name }}!</p>
+    {% else %}
+        <p>Please log in.</p>
+    {% endif %}
+
+    {% partial 'footer' %}
+</div>
+
+{% placeholder sidebar %}
+    <div class="sidebar">
+        {% content 'sidebar-content.htm' %}
+    </div>
+{% endplaceholder %}
+
+{% flash %}
+    <div class="alert alert-{{ type }}">
+        {{ message }}
+    </div>
+{% endflash %}
+
+{% scripts %}
+<script>
+    console.log('October CMS: ' + config('app.name'));
+    dump(session('user'));
+</script>
+
+{% styles %}
+<style>
+    .container { padding: 20px; }
+</style>
