@@ -6,7 +6,19 @@ October CMS Twig grammar for [tree-sitter](https://github.com/tree-sitter/tree-s
 
 ## Overview
 
-This package provides a tree-sitter grammar for October CMS Twig templates. It extends the standard Twig grammar with October CMS specific features including:
+This package provides a tree-sitter grammar for October CMS templates. It supports the complete October CMS template structure including:
+
+### Template Structure
+
+October CMS templates can contain up to three sections separated by `==`:
+
+1. **Configuration Section** (INI format) - Template parameters and component configuration
+2. **PHP Code Section** - PHP functions and namespace imports
+3. **Markup Section** - Twig template markup
+
+All sections are optional, and the parser handles any combination of these sections.
+
+### October CMS Specific Features
 
 ### October CMS Specific Tags
 - `{% page %}` - Renders page content
@@ -67,9 +79,24 @@ const parser = new Parser();
 parser.setLanguage(October);
 
 const sourceCode = `
+url = "/blog"
+layout = "default"
+
+[component]
+posts = "blogPosts"
+==
+<?php
+use Acme\Blog\Classes\Post;
+
+function onStart()
+{
+    $this['posts'] = Post::get();
+}
+?>
+==
 {% page %}
 <h1>{{ title|app }}</h1>
-{% component 'myComponent' %}
+{% component 'blogPosts' %}
 `;
 
 const tree = parser.parse(sourceCode);
@@ -86,6 +113,9 @@ parser = Parser()
 parser.set_language(October)
 
 source_code = b"""
+url = "/blog"
+layout = "default"
+==
 {% page %}
 <h1>{{ title|app }}</h1>
 """
@@ -113,6 +143,9 @@ fn main() {
     parser.set_language(&language()).expect("Error loading October grammar");
 
     let source_code = r#"
+    url = "/blog"
+    layout = "default"
+    ==
     {% page %}
     <h1>{{ title|app }}</h1>
     "#;

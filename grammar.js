@@ -8,7 +8,81 @@ module.exports = grammar({
   extras: () => [/\s/],
   rules: {
     template: ($) =>
-      repeat(
+      choice(
+        // All three sections
+        prec(3, seq($.configuration_section, $.php_section, $.markup_section)),
+        // Config and PHP only
+        prec(3, seq($.configuration_section, $.php_section)),
+        // Config and markup only
+        prec(3, seq($.configuration_section, $.markup_section)),
+        // PHP and markup only
+        prec(2, seq($.php_section, $.markup_section)),
+        // Config only
+        prec(3, $.configuration_section),
+        // PHP only
+        prec(2, $.php_section),
+        // Markup only (original behavior, lowest precedence)
+        prec(1, $.markup_section)
+      ),
+
+    // Configuration section (INI format)
+    configuration_section: ($) =>
+      prec(10, seq(
+        repeat1(choice($.ini_property, $.ini_section_header, $.ini_comment)),
+        token('==')
+      )),
+
+    ini_comment: () => token(prec(20, seq(';', /.*/))),
+
+    ini_property: ($) =>
+      prec(20, seq(
+        field('key', $.ini_key),
+        token('='),
+        field('value', $.ini_value)
+      )),
+
+    ini_key: () => token(prec(20, /[a-zA-Z_][a-zA-Z0-9_]*/)),
+
+    ini_value: () =>
+      choice(
+        // Quoted string
+        seq('"', /[^"\n]*/, '"'),
+        // Unquoted value (not containing newlines or ==)
+        /[^\n\r=]+/
+      ),
+
+    ini_section_header: ($) =>
+      seq(
+        '[',
+        field('name', $.ini_section_name),
+        ']'
+      ),
+
+    ini_section_name: () => /[^\]]+/,
+
+    // PHP section - simplified to just capture content
+    php_section: ($) =>
+      prec(10, seq(
+        $.php_open_tag,
+        optional($.php_content),
+        optional($.php_close_tag),
+        '=='
+      )),
+
+    php_open_tag: () => token(prec(20, choice('<?php', '<?'))),
+
+    php_close_tag: () => token(prec(10, '?>')),
+
+    // Match PHP content carefully to avoid consuming ?> or ==
+    php_content: ($) => repeat1(choice(
+      /[^?=]+/,         // Any character except ? and =
+      /\?[^>]/,         // ? followed by anything except >
+      /=[^=]/           // Single = followed by anything except =
+    )),
+
+    // Markup section (Twig templates)
+    markup_section: ($) =>
+      repeat1(
         choice($.statement_directive, $.output_directive, $.comment, $.content)
       ),
 

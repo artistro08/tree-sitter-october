@@ -405,6 +405,29 @@
     "fields": {}
   },
   {
+    "type": "configuration_section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ini_comment",
+          "named": true
+        },
+        {
+          "type": "ini_property",
+          "named": true
+        },
+        {
+          "type": "ini_section_header",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "content",
     "named": true,
     "fields": {}
@@ -423,6 +446,10 @@
         },
         {
           "type": "filter_identifier",
+          "named": true
+        },
+        {
+          "type": "october_filter",
           "named": true
         }
       ]
@@ -663,6 +690,10 @@
         },
         {
           "type": "function_identifier",
+          "named": true
+        },
+        {
+          "type": "october_function",
           "named": true
         }
       ]
@@ -1043,6 +1074,53 @@
     }
   },
   {
+    "type": "ini_property",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ini_key",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ini_value",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "ini_section_header",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ini_section_name",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "ini_value",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "interpolated_string",
     "named": true,
     "fields": {},
@@ -1133,12 +1211,54 @@
     }
   },
   {
+    "type": "markup_section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "output_directive",
+          "named": true
+        },
+        {
+          "type": "statement_directive",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "method",
     "named": true,
     "fields": {}
   },
   {
     "type": "name",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "october_filter",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "october_function",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "october_tag",
     "named": true,
     "fields": {}
   },
@@ -1269,6 +1389,34 @@
     }
   },
   {
+    "type": "php_content",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "php_section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "php_close_tag",
+          "named": true
+        },
+        {
+          "type": "php_content",
+          "named": true
+        },
+        {
+          "type": "php_open_tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "statement_directive",
     "named": true,
     "fields": {},
@@ -1365,6 +1513,10 @@
           "named": true
         },
         {
+          "type": "october_tag",
+          "named": true
+        },
+        {
           "type": "repeat",
           "named": true
         },
@@ -1398,25 +1550,22 @@
   {
     "type": "template",
     "named": true,
+    "root": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "comment",
+          "type": "configuration_section",
           "named": true
         },
         {
-          "type": "content",
+          "type": "markup_section",
           "named": true
         },
         {
-          "type": "output_directive",
-          "named": true
-        },
-        {
-          "type": "statement_directive",
+          "type": "php_section",
           "named": true
         }
       ]
@@ -1892,6 +2041,18 @@
     "named": false
   },
   {
+    "type": "ini_comment",
+    "named": true
+  },
+  {
+    "type": "ini_key",
+    "named": true
+  },
+  {
+    "type": "ini_section_name",
+    "named": true
+  },
+  {
     "type": "is",
     "named": false
   },
@@ -1924,8 +2085,28 @@
     "named": true
   },
   {
+    "type": "october_filter",
+    "named": false
+  },
+  {
+    "type": "october_function",
+    "named": false
+  },
+  {
+    "type": "october_tag",
+    "named": false
+  },
+  {
     "type": "or",
     "named": false
+  },
+  {
+    "type": "php_close_tag",
+    "named": true
+  },
+  {
+    "type": "php_open_tag",
+    "named": true
   },
   {
     "type": "repeat",
