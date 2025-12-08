@@ -10,7 +10,7 @@
 ; INI section headers
 (ini_section_header
   "[" @punctuation.bracket
-  (ini_section_name) @type
+  (ini_section_name) @module
   "]" @punctuation.bracket)
 
 ; INI properties
