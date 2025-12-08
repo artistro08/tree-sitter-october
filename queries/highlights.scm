@@ -1,5 +1,38 @@
 ; Highlights for October CMS Twig
 
+; ============================================================================
+; Configuration Section (INI)
+; ============================================================================
+
+; INI comments
+(ini_comment) @comment
+
+; INI section headers
+(ini_section_header
+  "[" @punctuation.bracket
+  (ini_section_name) @type
+  "]" @punctuation.bracket)
+
+; INI properties
+(ini_property
+  (ini_key) @property
+  "=" @operator
+  (ini_value) @string)
+
+; ============================================================================
+; PHP Section
+; ============================================================================
+
+; PHP tags
+(php_open_tag) @tag
+(php_close_tag) @tag
+
+; PHP content is handled via injections.scm for proper syntax highlighting
+
+; ============================================================================
+; Markup Section (Twig)
+; ============================================================================
+
 ; Comments
 (comment) @comment
 
@@ -55,8 +88,6 @@
 "%}" @punctuation.bracket
 "{{" @punctuation.bracket
 "}}" @punctuation.bracket
-"{#" @punctuation.bracket
-"#}" @punctuation.bracket
 
 ; Punctuation
 "," @punctuation.delimiter
