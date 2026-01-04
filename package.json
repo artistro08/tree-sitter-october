@@ -31,7 +31,9 @@
     }
   },
   "scripts": {
-    "build": "tree-sitter generate && node-gyp-build",
+    "install": "echo Skipping native build - use 'npm run build-native' if needed",
+    "build": "tree-sitter generate",
+    "build-native": "node-gyp rebuild",
     "test": "tree-sitter test",
     "parse": "tree-sitter parse"
   },

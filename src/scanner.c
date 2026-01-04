@@ -1,4 +1,5 @@
 #include "tree_sitter/parser.h"
+#include <ctype.h>
 #include <wctype.h>
 
 enum TokenType {
@@ -19,8 +20,20 @@ bool tree_sitter_october_external_scanner_scan(void *payload, TSLexer *lexer,
                                                 const bool *valid_symbols) {
   if (valid_symbols[CONTENT]) {
     bool has_content = false;
+    bool at_line_start = lexer->get_column(lexer) == 0;
 
     while (true) {
+      // Don't match content at the start of lines that might be INI config
+      if (at_line_start && (isalpha(lexer->lookahead) || lexer->lookahead == '[')) {
+        // Might be INI section header or key
+        break;
+      }
+
+      // Don't match section separators
+      if (lexer->lookahead == '=' && at_line_start) {
+        break;
+      }
+
       // Check for Twig delimiters
       if (lexer->lookahead == '{') {
         lexer->mark_end(lexer);
@@ -30,6 +43,7 @@ bool tree_sitter_october_external_scanner_scan(void *payload, TSLexer *lexer,
           break;
         }
         has_content = true;
+        at_line_start = false;
         continue;
       }
 
@@ -39,8 +53,17 @@ bool tree_sitter_october_external_scanner_scan(void *payload, TSLexer *lexer,
         break;
       }
 
+      //  Update line start tracking
+      if (lexer->lookahead == '\n') {
+        at_line_start = true;
+        has_content = true;
+        advance(lexer);
+        continue;
+      }
+
       // Consume regular content
       has_content = true;
+      at_line_start = false;
       advance(lexer);
     }
 

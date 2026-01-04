@@ -21,6 +21,8 @@ module.exports = grammar({
   conflicts: $ => [
     [$._expression, $.binary_expression],
     [$.subscript_expression],
+    [$._expression, $._parameter_list],
+    [$.ternary_expression, $.arrow_function],
   ],
 
   rules: {
@@ -111,7 +113,7 @@ module.exports = grammar({
     )),
 
     // ===== Twig Section =====
-    twig_section: $ => repeat(choice(
+    twig_section: $ => repeat1(choice(
       $.statement_directive,
       $.output_directive,
       $.comment,
@@ -218,7 +220,7 @@ module.exports = grammar({
     // Auto-escape statement
     auto_escape_statement: $ => seq(
       'autoescape',
-      optional(field('strategy', choice('html', 'js', 'css', 'url', 'html_attr', false)))
+      optional(field('strategy', choice($.string, $.identifier)))
     ),
 
     // Do statement
@@ -348,12 +350,13 @@ module.exports = grammar({
     string: $ => choice(
       seq('"', optional(repeat(choice(
         $._string_content_double,
-        $.interpolation
+        $.interpolation,
+        '#'
       ))), '"'),
       seq("'", optional(/[^']+/), "'")
     ),
 
-    _string_content_double: $ => /[^"#]+|#(?!\{)/,
+    _string_content_double: $ => /[^"#]+/,
 
     interpolation: $ => seq(
       '#{',
