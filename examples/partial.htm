@@ -1,0 +1,23 @@
+description = "Sidebar partial"
+==
+<aside class="sidebar">
+    <h3>Categories</h3>
+    <ul>
+        {% for category in categories %}
+            <li>
+                <a href="{{ category.url }}">
+                    {{ category.name }} ({{ category.post_count }})
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h3>Recent Posts</h3>
+    {% content 'recent-posts' %}
+
+    <h3>Search</h3>
+    <form>
+        <input type="search" name="q" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+</aside>

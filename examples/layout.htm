@@ -1,0 +1,33 @@
+description = "Default layout"
+==
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ this.page.title }} - {{ this.site.name }}</title>
+    <link rel="stylesheet" href="{{ 'assets/css/theme.css'|theme }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ 'home'|page }}">Home</a>
+            <a href="{{ 'blog'|page }}">Blog</a>
+            <a href="{{ 'about'|page }}">About</a>
+            <a href="{{ 'contact'|page }}">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        {% page %}
+    </main>
+
+    <footer>
+        <p>&copy; {{ "now"|date('Y') }} {{ this.site.name }}. All rights reserved.</p>
+        {% placeholder footer %}
+    </footer>
+
+    <script src="{{ 'assets/js/app.js'|theme }}"></script>
+    {% framework extras %}
+</body>
+</html>
