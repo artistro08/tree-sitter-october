@@ -4,8 +4,8 @@ target/
 node_modules/
 *.node
 
-# Parser generated files
-src/parser.c
+# Parser generated files (keep parser.c for Zed compatibility)
+# src/parser.c
 src/tree_sitter/
 
 # Generated node types
