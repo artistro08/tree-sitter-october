@@ -1287,6 +1287,21 @@
     }
   },
   {
+    "type": "php_code",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "php_content",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "php_section",
     "named": true,
     "fields": {},
@@ -1870,6 +1885,10 @@
     "named": false
   },
   {
+    "type": "<?php",
+    "named": false
+  },
+  {
     "type": "=",
     "named": false
   },
@@ -1895,6 +1914,10 @@
   },
   {
     "type": "?:",
+    "named": false
+  },
+  {
+    "type": "?>",
     "named": false
   },
   {
@@ -2006,7 +2029,7 @@
     "named": false
   },
   {
-    "type": "php_code",
+    "type": "php_content",
     "named": true
   },
   {

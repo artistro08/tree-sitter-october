@@ -1,4 +1,5 @@
-; PHP code injection - using both standard and Zed shorthand syntax for compatibility
+; PHP code injection - inject the whole php_code node (includes tags as children)
+; Using both standard and Zed shorthand syntax
 ((php_code) @injection.content
   (#set! injection.language "php"))
 
