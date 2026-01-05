@@ -60,13 +60,14 @@ module.exports = grammar({
     php_section: ($) =>
       prec(100, seq(
         '<?php',
-        /\r?\n/,
         alias($._php_code, $.php_code),
-        optional(seq('?>', /\r?\n/)),
+        optional('?>'),
         $.section_delimiter
       )),
 
-    _php_code: () => repeat1(/[^=?]+|=[^=]|[?][^>]/),
+    // Match PHP code - stop at ?> or section delimiter
+    // Pattern: match any char except ?, or ? followed by non->
+    _php_code: () => token(prec(-1, /([^?]+|\?[^>])+/)),
 
     // ===== Twig Section =====
     twig_section: ($) =>

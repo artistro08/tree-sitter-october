@@ -215,10 +215,6 @@
             "value": "<?php"
           },
           {
-            "type": "PATTERN",
-            "value": "\\r?\\n"
-          },
-          {
             "type": "ALIAS",
             "content": {
               "type": "SYMBOL",
@@ -231,17 +227,8 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "STRING",
-                    "value": "?>"
-                  },
-                  {
-                    "type": "PATTERN",
-                    "value": "\\r?\\n"
-                  }
-                ]
+                "type": "STRING",
+                "value": "?>"
               },
               {
                 "type": "BLANK"
@@ -256,10 +243,14 @@
       }
     },
     "_php_code": {
-      "type": "REPEAT1",
+      "type": "TOKEN",
       "content": {
-        "type": "PATTERN",
-        "value": "[^=?]+|=[^=]|[?][^>]"
+        "type": "PREC",
+        "value": -1,
+        "content": {
+          "type": "PATTERN",
+          "value": "([^?]+|\\?[^>])+"
+        }
       }
     },
     "twig_section": {

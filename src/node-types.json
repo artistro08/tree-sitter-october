@@ -1287,11 +1287,6 @@
     }
   },
   {
-    "type": "php_code",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "php_section",
     "named": true,
     "fields": {},
@@ -2017,6 +2012,10 @@
   {
     "type": "or",
     "named": false
+  },
+  {
+    "type": "php_code",
+    "named": true
   },
   {
     "type": "repeat",
