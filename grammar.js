@@ -5,49 +5,54 @@ const REGEX_NUMBER = /[0-9]+(?:\.[0-9]+)?([Ee][\+\-][0-9]+)?/;
 
 module.exports = grammar({
   name: 'october',
-  extras: () => [/\s/],
+  extras: () => [/[ \t]/],
+  externals: $ => [
+    $._section_delimiter_token
+  ],
   rules: {
-    // October CMS template with optional INI, PHP, and Twig sections
+    // October CMS template: INI and/or PHP sections followed by optional Twig
     template: ($) =>
       choice(
-        // Full template with all sections
+        // Config + PHP + Twig
         seq($.configuration_section, $.php_section, $.twig_section),
-        // INI + Twig
+        // Config + Twig
         seq($.configuration_section, $.twig_section),
         // PHP + Twig
         seq($.php_section, $.twig_section),
-        // INI + PHP (no Twig)
+        // Config + PHP (no Twig)
         seq($.configuration_section, $.php_section),
-        // Just INI
+        // Just Config
         $.configuration_section,
         // Just PHP
         $.php_section,
-        // Just Twig
+        // Just Twig (fallback)
         $.twig_section
       ),
 
     // Section delimiter: ==
-    section_delimiter: () => /=={2,}[ \t]*\r?\n/,
+    section_delimiter: ($) => $._section_delimiter_token,
 
     // ===== INI Configuration Section =====
     configuration_section: ($) =>
       seq(
-        repeat(choice($.ini_setting, $.ini_section_header, /\r?\n/)),
+        repeat1(choice($.ini_setting, $.ini_section_header, /\r?\n/)),
         $.section_delimiter
       ),
 
-    ini_section_header: () => seq('[', /[^\]]+/, ']'),
+    ini_section_header: () => seq('[', /[^\]\r\n]+/, ']'),
 
     ini_setting: () =>
       seq(
-        /[a-zA-Z_][a-zA-Z0-9_]*/, // key
-        optional(seq(/[ \t]*/, '=', /[ \t]*/, /[^\r\n]+/)) // optional value
+        /[a-zA-Z_][a-zA-Z0-9_]*/,  // key
+        '=',
+        /[^\r\n]+/  // value
       ),
 
     // ===== PHP Code Section =====
     php_section: ($) =>
       seq(
-        optional(seq('<?php', /\r?\n/)),
+        '<?php',
+        /\r?\n/,
         alias($._php_code, $.php_code),
         optional(seq('?>', /\r?\n/)),
         $.section_delimiter
@@ -57,11 +62,14 @@ module.exports = grammar({
 
     // ===== Twig Section =====
     twig_section: ($) =>
-      repeat1(
-        choice($.statement_directive, $.output_directive, $.comment, $.content)
-      ),
+      repeat1(choice(
+        $.statement_directive,
+        $.output_directive,
+        $.comment,
+        $.content
+      )),
 
-    content: () => prec.right(repeat1(/[^\{]+|\{/)),
+    content: () => prec(-1, repeat1(/[^\{]+|\{/)),
 
     comment: () => seq('{#', /[^#]*\#+([^\}#][^#]*\#+)*/, '}'),
 

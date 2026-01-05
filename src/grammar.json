@@ -76,14 +76,14 @@
       ]
     },
     "section_delimiter": {
-      "type": "PATTERN",
-      "value": "=={2,}[ \\t]*\\r?\\n"
+      "type": "SYMBOL",
+      "name": "_section_delimiter_token"
     },
     "configuration_section": {
       "type": "SEQ",
       "members": [
         {
-          "type": "REPEAT",
+          "type": "REPEAT1",
           "content": {
             "type": "CHOICE",
             "members": [
@@ -117,7 +117,7 @@
         },
         {
           "type": "PATTERN",
-          "value": "[^\\]]+"
+          "value": "[^\\]\\r\\n]+"
         },
         {
           "type": "STRING",
@@ -133,33 +133,12 @@
           "value": "[a-zA-Z_][a-zA-Z0-9_]*"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "PATTERN",
-                  "value": "[ \\t]*"
-                },
-                {
-                  "type": "STRING",
-                  "value": "="
-                },
-                {
-                  "type": "PATTERN",
-                  "value": "[ \\t]*"
-                },
-                {
-                  "type": "PATTERN",
-                  "value": "[^\\r\\n]+"
-                }
-              ]
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "STRING",
+          "value": "="
+        },
+        {
+          "type": "PATTERN",
+          "value": "[^\\r\\n]+"
         }
       ]
     },
@@ -167,25 +146,12 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": "<?php"
-                },
-                {
-                  "type": "PATTERN",
-                  "value": "\\r?\\n"
-                }
-              ]
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "STRING",
+          "value": "<?php"
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\r?\\n"
         },
         {
           "type": "ALIAS",
@@ -255,8 +221,8 @@
       }
     },
     "content": {
-      "type": "PREC_RIGHT",
-      "value": 0,
+      "type": "PREC",
+      "value": -1,
       "content": {
         "type": "REPEAT1",
         "content": {
@@ -2136,12 +2102,17 @@
   "extras": [
     {
       "type": "PATTERN",
-      "value": "\\s"
+      "value": "[ \\t]"
     }
   ],
   "conflicts": [],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "_section_delimiter_token"
+    }
+  ],
   "inline": [],
   "supertypes": [],
   "reserved": {}

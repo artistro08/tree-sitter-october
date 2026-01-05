@@ -1326,6 +1326,11 @@
     }
   },
   {
+    "type": "section_delimiter",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "statement_directive",
     "named": true,
     "fields": {},
@@ -2018,10 +2023,6 @@
   },
   {
     "type": "repeat",
-    "named": true
-  },
-  {
-    "type": "section_delimiter",
     "named": true
   },
   {
