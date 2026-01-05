@@ -1,3 +1,17 @@
+; ===== October CMS Sections =====
+
+; Section delimiter (==)
+(section_delimiter) @punctuation.special
+
+; INI Configuration Section
+(ini_section_header) @type
+(ini_setting) @property
+
+; PHP Code Section
+(php_code) @embedded
+
+; ===== Twig Syntax =====
+
 (comment) @comment
 
 (filter_identifier) @function.call

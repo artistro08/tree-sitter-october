@@ -405,6 +405,29 @@
     "fields": {}
   },
   {
+    "type": "configuration_section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ini_section_header",
+          "named": true
+        },
+        {
+          "type": "ini_setting",
+          "named": true
+        },
+        {
+          "type": "section_delimiter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "content",
     "named": true,
     "fields": {}
@@ -1043,6 +1066,16 @@
     }
   },
   {
+    "type": "ini_section_header",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "ini_setting",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "interpolated_string",
     "named": true,
     "fields": {},
@@ -1269,6 +1302,30 @@
     }
   },
   {
+    "type": "php_code",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "php_section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "php_code",
+          "named": true
+        },
+        {
+          "type": "section_delimiter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "statement_directive",
     "named": true,
     "fields": {},
@@ -1402,22 +1459,18 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "comment",
+          "type": "configuration_section",
           "named": true
         },
         {
-          "type": "content",
+          "type": "php_section",
           "named": true
         },
         {
-          "type": "output_directive",
-          "named": true
-        },
-        {
-          "type": "statement_directive",
+          "type": "twig_section",
           "named": true
         }
       ]
@@ -1573,6 +1626,33 @@
         },
         {
           "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "twig_section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "output_directive",
+          "named": true
+        },
+        {
+          "type": "statement_directive",
           "named": true
         }
       ]
@@ -1805,6 +1885,10 @@
     "named": false
   },
   {
+    "type": "<?php",
+    "named": false
+  },
+  {
     "type": "=",
     "named": false
   },
@@ -1830,6 +1914,10 @@
   },
   {
     "type": "?:",
+    "named": false
+  },
+  {
+    "type": "?>",
     "named": false
   },
   {
@@ -1930,6 +2018,10 @@
   },
   {
     "type": "repeat",
+    "named": true
+  },
+  {
+    "type": "section_delimiter",
     "named": true
   },
   {

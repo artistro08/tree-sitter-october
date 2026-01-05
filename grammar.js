@@ -7,8 +7,57 @@ module.exports = grammar({
   name: 'october',
   extras: () => [/\s/],
   rules: {
+    // October CMS template with optional INI, PHP, and Twig sections
     template: ($) =>
-      repeat(
+      choice(
+        // Full template with all sections
+        seq($.configuration_section, $.php_section, $.twig_section),
+        // INI + Twig
+        seq($.configuration_section, $.twig_section),
+        // PHP + Twig
+        seq($.php_section, $.twig_section),
+        // INI + PHP (no Twig)
+        seq($.configuration_section, $.php_section),
+        // Just INI
+        $.configuration_section,
+        // Just PHP
+        $.php_section,
+        // Just Twig
+        $.twig_section
+      ),
+
+    // Section delimiter: ==
+    section_delimiter: () => /=={2,}[ \t]*\r?\n/,
+
+    // ===== INI Configuration Section =====
+    configuration_section: ($) =>
+      seq(
+        repeat(choice($.ini_setting, $.ini_section_header, /\r?\n/)),
+        $.section_delimiter
+      ),
+
+    ini_section_header: () => seq('[', /[^\]]+/, ']'),
+
+    ini_setting: () =>
+      seq(
+        /[a-zA-Z_][a-zA-Z0-9_]*/, // key
+        optional(seq(/[ \t]*/, '=', /[ \t]*/, /[^\r\n]+/)) // optional value
+      ),
+
+    // ===== PHP Code Section =====
+    php_section: ($) =>
+      seq(
+        optional(seq('<?php', /\r?\n/)),
+        alias($._php_code, $.php_code),
+        optional(seq('?>', /\r?\n/)),
+        $.section_delimiter
+      ),
+
+    _php_code: () => repeat1(/[^=?]+|=[^=]|[?][^>]/),
+
+    // ===== Twig Section =====
+    twig_section: ($) =>
+      repeat1(
         choice($.statement_directive, $.output_directive, $.comment, $.content)
       ),
 

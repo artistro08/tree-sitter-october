@@ -3,7 +3,235 @@
   "name": "october",
   "rules": {
     "template": {
-      "type": "REPEAT",
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "configuration_section"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "php_section"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "twig_section"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "configuration_section"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "twig_section"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "php_section"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "twig_section"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "configuration_section"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "php_section"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "configuration_section"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "php_section"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "twig_section"
+        }
+      ]
+    },
+    "section_delimiter": {
+      "type": "PATTERN",
+      "value": "=={2,}[ \\t]*\\r?\\n"
+    },
+    "configuration_section": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "ini_setting"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "ini_section_header"
+              },
+              {
+                "type": "PATTERN",
+                "value": "\\r?\\n"
+              }
+            ]
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "section_delimiter"
+        }
+      ]
+    },
+    "ini_section_header": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "["
+        },
+        {
+          "type": "PATTERN",
+          "value": "[^\\]]+"
+        },
+        {
+          "type": "STRING",
+          "value": "]"
+        }
+      ]
+    },
+    "ini_setting": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "[a-zA-Z_][a-zA-Z0-9_]*"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "PATTERN",
+                  "value": "[ \\t]*"
+                },
+                {
+                  "type": "STRING",
+                  "value": "="
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[ \\t]*"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[^\\r\\n]+"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "php_section": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "<?php"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "\\r?\\n"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_php_code"
+          },
+          "named": true,
+          "value": "php_code"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "?>"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "\\r?\\n"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "section_delimiter"
+        }
+      ]
+    },
+    "_php_code": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "PATTERN",
+        "value": "[^=?]+|=[^=]|[?][^>]"
+      }
+    },
+    "twig_section": {
+      "type": "REPEAT1",
       "content": {
         "type": "CHOICE",
         "members": [
