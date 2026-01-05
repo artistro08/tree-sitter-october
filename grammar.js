@@ -59,18 +59,18 @@ module.exports = grammar({
     // ===== PHP Code Section =====
     php_section: ($) =>
       prec(100, seq(
-        alias($._php_code_with_tags, $.php_code),
+        $.php_code,
         $.section_delimiter
       )),
 
     // PHP code including tags - this is what gets injected for syntax highlighting
-    _php_code_with_tags: () => token(prec(-1, seq(
-      /[\s]*/,           // Skip leading whitespace
+    php_code: ($) => seq(
       '<?php',
-      /([^?]+|\?[^>])*/,  // PHP code content
-      optional('?>'),
-      /[\s]*/            // Skip trailing whitespace
-    ))),
+      alias($._php_content, $.php_content),
+      optional('?>')
+    ),
+
+    _php_content: () => token(prec(-1, /([^?]+|\?[^>])+/)),
 
     // ===== Twig Section =====
     twig_section: ($) =>

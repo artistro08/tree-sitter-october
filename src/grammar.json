@@ -211,29 +211,8 @@
         "type": "SEQ",
         "members": [
           {
-            "type": "STRING",
-            "value": "<?php"
-          },
-          {
-            "type": "ALIAS",
-            "content": {
-              "type": "SYMBOL",
-              "name": "_php_code"
-            },
-            "named": true,
-            "value": "php_code"
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "?>"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
+            "type": "SYMBOL",
+            "name": "php_code"
           },
           {
             "type": "SYMBOL",
@@ -242,7 +221,37 @@
         ]
       }
     },
-    "_php_code": {
+    "php_code": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "<?php"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_php_content"
+          },
+          "named": true,
+          "value": "php_content"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "?>"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "_php_content": {
       "type": "TOKEN",
       "content": {
         "type": "PREC",
