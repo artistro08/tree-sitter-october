@@ -1,0 +1,69 @@
+{
+  "name": "tree-sitter-october",
+  "version": "0.1.0",
+  "description": "October CMS grammar for tree-sitter (based on Twig)",
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "scripts": {
+    "build": "tree-sitter generate && node-gyp build",
+    "test": "npm run build && tree-sitter test",
+    "install": "node-gyp-build",
+    "prebuildify": "prebuildify --napi --strip"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artistro08/tree-sitter-october.git"
+  },
+  "keywords": [
+    "parser",
+    "october",
+    "octobercms",
+    "twig",
+    "template"
+  ],
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
+  ],
+  "author": "Devin Green (artistro08)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/artistro08/tree-sitter-october/issues"
+  },
+  "homepage": "https://github.com/artistro08/tree-sitter-october#readme",
+  "dependencies": {
+    "node-addon-api": "^7.1.0",
+    "node-gyp-build": "^4.8.0"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree_sitter": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.20.7",
+    "prebuildify": "^6.0.0"
+  },
+  "tree-sitter": [
+    {
+      "scope": "twig",
+      "file-types": [
+        "twig",
+        "html.twig",
+        "html.twig.js.css"
+      ],
+      "highlights": [
+        "queries/highlights.scm"
+      ],
+      "injections": "queries/injections.scm",
+      "injection-regex": "twig"
+    }
+  ]
+}
