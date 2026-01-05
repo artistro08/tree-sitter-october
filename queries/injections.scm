@@ -1,5 +1,5 @@
-; PHP code section injection
-((php_code) @injection.content
+; PHP section injection - inject entire section including <?php tags
+((php_section) @injection.content
   (#set! injection.language "php")
   (#set! injection.combined))
 
