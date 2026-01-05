@@ -1,3 +1,9 @@
+; PHP code section injection
+((php_code) @injection.content
+  (#set! injection.language "php")
+  (#set! injection.combined))
+
+; HTML content in Twig section
 ((content) @injection.content
  (#set! injection.language "html")
  (#set! injection.combined))
