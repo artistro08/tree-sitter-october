@@ -1,7 +1,6 @@
-; PHP code injection - php_code node now includes <?php tags
+; PHP code injection - php_code is a raw text token like HTML's raw_text
 ((php_code) @injection.content
-  (#set! injection.language "php")
-  (#set! injection.include-children))
+  (#set! injection.language "php"))
 
 ; HTML content in Twig section
 ((content) @injection.content

@@ -63,14 +63,13 @@ module.exports = grammar({
         $.section_delimiter
       )),
 
-    // PHP code including tags - this is what gets injected for syntax highlighting
-    php_code: ($) => seq(
+    // PHP code as single raw text token (like raw_text in tree-sitter-html)
+    // This is what gets injected for syntax highlighting
+    php_code: () => token(prec(-1, seq(
       '<?php',
-      alias($._php_content, $.php_content),
+      /([^?]+|\?[^>])*/,
       optional('?>')
-    ),
-
-    _php_content: () => token(prec(-1, /([^?]+|\?[^>])+/)),
+    ))),
 
     // ===== Twig Section =====
     twig_section: ($) =>
