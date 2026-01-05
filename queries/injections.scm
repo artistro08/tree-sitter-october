@@ -1,7 +1,6 @@
-; PHP section injection - inject entire section including <?php tags
-((php_section) @injection.content
-  (#set! injection.language "php")
-  (#set! injection.combined))
+; PHP code injection - php_code node now includes <?php tags
+((php_code) @injection.content
+  (#set! injection.language "php"))
 
 ; HTML content in Twig section
 ((content) @injection.content
