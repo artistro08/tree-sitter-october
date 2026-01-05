@@ -5,28 +5,33 @@ const REGEX_NUMBER = /[0-9]+(?:\.[0-9]+)?([Ee][\+\-][0-9]+)?/;
 
 module.exports = grammar({
   name: 'october',
-  extras: () => [/[ \t]/],
+  extras: () => [/[ \t\r\n]/],  // Allow whitespace including newlines
   externals: $ => [
     $._section_delimiter_token
   ],
+  conflicts: $ => [
+    [$.configuration_section, $.twig_section],
+    [$.php_section, $.twig_section],
+  ],
   rules: {
-    // October CMS template: INI and/or PHP sections followed by optional Twig
+    // October CMS template: Try sections FIRST with high precedence, Twig as fallback
+    // Higher precedence for patterns with more specific sections (PHP/INI)
     template: ($) =>
       choice(
-        // Config + PHP + Twig
-        seq($.configuration_section, $.php_section, $.twig_section),
+        // Config + PHP + Twig (highest priority)
+        prec.dynamic(100, seq($.configuration_section, $.php_section, $.twig_section)),
+        // Config + PHP (no Twig) - higher than Config + Twig!
+        prec.dynamic(95, seq($.configuration_section, $.php_section)),
         // Config + Twig
-        seq($.configuration_section, $.twig_section),
+        prec.dynamic(90, seq($.configuration_section, $.twig_section)),
         // PHP + Twig
-        seq($.php_section, $.twig_section),
-        // Config + PHP (no Twig)
-        seq($.configuration_section, $.php_section),
+        prec.dynamic(85, seq($.php_section, $.twig_section)),
         // Just Config
-        $.configuration_section,
+        prec.dynamic(70, $.configuration_section),
         // Just PHP
-        $.php_section,
-        // Just Twig (fallback)
-        $.twig_section
+        prec.dynamic(65, $.php_section),
+        // Just Twig (LOWEST priority - last resort)
+        prec.dynamic(-100, $.twig_section)
       ),
 
     // Section delimiter: ==
@@ -34,29 +39,32 @@ module.exports = grammar({
 
     // ===== INI Configuration Section =====
     configuration_section: ($) =>
-      seq(
+      prec(100, seq(
         repeat1(choice($.ini_setting, $.ini_section_header, /\r?\n/)),
         $.section_delimiter
-      ),
+      )),
 
-    ini_section_header: () => seq('[', /[^\]\r\n]+/, ']'),
+    ini_section_header: () => token(seq('[', /[^\]\r\n]+/, ']')),
 
     ini_setting: () =>
-      seq(
+      token(prec(10, seq(
         /[a-zA-Z_][a-zA-Z0-9_]*/,  // key
+        optional(/\[[^\]]+\]/),  // optional array index like [en]
+        /[ \t]*/,
         '=',
+        /[ \t]*/,
         /[^\r\n]+/  // value
-      ),
+      ))),
 
     // ===== PHP Code Section =====
     php_section: ($) =>
-      seq(
+      prec(100, seq(
         '<?php',
         /\r?\n/,
         alias($._php_code, $.php_code),
         optional(seq('?>', /\r?\n/)),
         $.section_delimiter
-      ),
+      )),
 
     _php_code: () => repeat1(/[^=?]+|=[^=]|[?][^>]/),
 
@@ -69,7 +77,9 @@ module.exports = grammar({
         $.content
       )),
 
-    content: () => prec(-1, repeat1(/[^\{]+|\{/)),
+    // Content: HTML/text but NOT Twig delimiters or PHP tags
+    // Explicitly avoid matching < followed by ? (PHP tags)
+    content: () => token(prec(-100, repeat1(/[^\{<]+|<[^?]|\{[^%{#]/))),
 
     comment: () => seq('{#', /[^#]*\#+([^\}#][^#]*\#+)*/, '}'),
 

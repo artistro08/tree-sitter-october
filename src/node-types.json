@@ -428,11 +428,6 @@
     }
   },
   {
-    "type": "content",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "filter",
     "named": true,
     "fields": {},
@@ -1064,16 +1059,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "ini_section_header",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "ini_setting",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "interpolated_string",
@@ -1974,6 +1959,10 @@
     "named": true
   },
   {
+    "type": "content",
+    "named": true
+  },
+  {
     "type": "ends with",
     "named": false
   },
@@ -1984,6 +1973,14 @@
   {
     "type": "in",
     "named": false
+  },
+  {
+    "type": "ini_section_header",
+    "named": true
+  },
+  {
+    "type": "ini_setting",
+    "named": true
   },
   {
     "type": "is",

@@ -6,72 +6,100 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "configuration_section"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "php_section"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "twig_section"
-            }
-          ]
+          "type": "PREC_DYNAMIC",
+          "value": 100,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "configuration_section"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "php_section"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "twig_section"
+              }
+            ]
+          }
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "configuration_section"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "twig_section"
-            }
-          ]
+          "type": "PREC_DYNAMIC",
+          "value": 95,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "configuration_section"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "php_section"
+              }
+            ]
+          }
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "php_section"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "twig_section"
-            }
-          ]
+          "type": "PREC_DYNAMIC",
+          "value": 90,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "configuration_section"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "twig_section"
+              }
+            ]
+          }
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "configuration_section"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "php_section"
-            }
-          ]
+          "type": "PREC_DYNAMIC",
+          "value": 85,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "php_section"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "twig_section"
+              }
+            ]
+          }
         },
         {
-          "type": "SYMBOL",
-          "name": "configuration_section"
+          "type": "PREC_DYNAMIC",
+          "value": 70,
+          "content": {
+            "type": "SYMBOL",
+            "name": "configuration_section"
+          }
         },
         {
-          "type": "SYMBOL",
-          "name": "php_section"
+          "type": "PREC_DYNAMIC",
+          "value": 65,
+          "content": {
+            "type": "SYMBOL",
+            "name": "php_section"
+          }
         },
         {
-          "type": "SYMBOL",
-          "name": "twig_section"
+          "type": "PREC_DYNAMIC",
+          "value": -100,
+          "content": {
+            "type": "SYMBOL",
+            "name": "twig_section"
+          }
         }
       ]
     },
@@ -80,114 +108,152 @@
       "name": "_section_delimiter_token"
     },
     "configuration_section": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "REPEAT1",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "ini_setting"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "ini_section_header"
-              },
-              {
-                "type": "PATTERN",
-                "value": "\\r?\\n"
-              }
-            ]
-          }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "section_delimiter"
-        }
-      ]
-    },
-    "ini_section_header": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "["
-        },
-        {
-          "type": "PATTERN",
-          "value": "[^\\]\\r\\n]+"
-        },
-        {
-          "type": "STRING",
-          "value": "]"
-        }
-      ]
-    },
-    "ini_setting": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "PATTERN",
-          "value": "[a-zA-Z_][a-zA-Z0-9_]*"
-        },
-        {
-          "type": "STRING",
-          "value": "="
-        },
-        {
-          "type": "PATTERN",
-          "value": "[^\\r\\n]+"
-        }
-      ]
-    },
-    "php_section": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "<?php"
-        },
-        {
-          "type": "PATTERN",
-          "value": "\\r?\\n"
-        },
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_php_code"
-          },
-          "named": true,
-          "value": "php_code"
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
+      "type": "PREC",
+      "value": 100,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "CHOICE",
               "members": [
                 {
-                  "type": "STRING",
-                  "value": "?>"
+                  "type": "SYMBOL",
+                  "name": "ini_setting"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "ini_section_header"
                 },
                 {
                   "type": "PATTERN",
                   "value": "\\r?\\n"
                 }
               ]
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "section_delimiter"
+          }
+        ]
+      }
+    },
+    "ini_section_header": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "["
+          },
+          {
+            "type": "PATTERN",
+            "value": "[^\\]\\r\\n]+"
+          },
+          {
+            "type": "STRING",
+            "value": "]"
+          }
+        ]
+      }
+    },
+    "ini_setting": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 10,
+        "content": {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "[a-zA-Z_][a-zA-Z0-9_]*"
             },
             {
-              "type": "BLANK"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "PATTERN",
+                  "value": "\\[[^\\]]+\\]"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "PATTERN",
+              "value": "[ \\t]*"
+            },
+            {
+              "type": "STRING",
+              "value": "="
+            },
+            {
+              "type": "PATTERN",
+              "value": "[ \\t]*"
+            },
+            {
+              "type": "PATTERN",
+              "value": "[^\\r\\n]+"
             }
           ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "section_delimiter"
         }
-      ]
+      }
+    },
+    "php_section": {
+      "type": "PREC",
+      "value": 100,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "<?php"
+          },
+          {
+            "type": "PATTERN",
+            "value": "\\r?\\n"
+          },
+          {
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_php_code"
+            },
+            "named": true,
+            "value": "php_code"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "?>"
+                  },
+                  {
+                    "type": "PATTERN",
+                    "value": "\\r?\\n"
+                  }
+                ]
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "section_delimiter"
+          }
+        ]
+      }
     },
     "_php_code": {
       "type": "REPEAT1",
@@ -221,13 +287,16 @@
       }
     },
     "content": {
-      "type": "PREC",
-      "value": -1,
+      "type": "TOKEN",
       "content": {
-        "type": "REPEAT1",
+        "type": "PREC",
+        "value": -100,
         "content": {
-          "type": "PATTERN",
-          "value": "[^\\{]+|\\{"
+          "type": "REPEAT1",
+          "content": {
+            "type": "PATTERN",
+            "value": "[^\\{<]+|<[^?]|\\{[^%{#]"
+          }
         }
       }
     },
@@ -2102,10 +2171,19 @@
   "extras": [
     {
       "type": "PATTERN",
-      "value": "[ \\t]"
+      "value": "[ \\t\\r\\n]"
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    [
+      "configuration_section",
+      "twig_section"
+    ],
+    [
+      "php_section",
+      "twig_section"
+    ]
+  ],
   "precedences": [],
   "externals": [
     {
