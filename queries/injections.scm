@@ -1,5 +1,5 @@
-; PHP code injection - inject the whole php_code node (includes tags as children)
-; Using both standard and Zed shorthand syntax
+; PHP code injection - php_code is now a leaf token (no children) for Zed injection
+; Zed only applies injections to nodes without child nodes
 ((php_code) @injection.content
   (#set! injection.language "php"))
 

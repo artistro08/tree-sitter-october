@@ -63,15 +63,13 @@ module.exports = grammar({
         $.section_delimiter
       )),
 
-    // PHP code with separate content node for injection
-    php_code: ($) => seq(
+    // PHP code as a single leaf token (NO children) - required for Zed injection
+    // Zed only applies injections to nodes without child nodes
+    php_code: () => token(prec(-1, seq(
       '<?php',
-      optional($.php_content),
+      /([^?]+|\?[^>])*/,
       optional('?>')
-    ),
-
-    // PHP content - this is what gets injected for syntax highlighting
-    php_content: () => token(prec(-1, /([^?]+|\?[^>])+/)),
+    ))),
 
     // ===== Twig Section =====
     twig_section: ($) =>
