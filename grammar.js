@@ -40,21 +40,13 @@ module.exports = grammar({
     // ===== INI Configuration Section =====
     configuration_section: ($) =>
       prec(100, seq(
-        repeat1(choice($.ini_setting, $.ini_section_header, /\r?\n/)),
+        $.ini_content,
         $.section_delimiter
       )),
 
-    ini_section_header: () => token(seq('[', /[^\]\r\n]+/, ']')),
-
-    ini_setting: () =>
-      token(prec(10, seq(
-        /[a-zA-Z_][a-zA-Z0-9_]*/,  // key
-        optional(/\[[^\]]+\]/),  // optional array index like [en]
-        /[ \t]*/,
-        '=',
-        /[ \t]*/,
-        /[^\r\n]+/  // value
-      ))),
+    // INI content as a single leaf token for injection
+    // Captures everything until section delimiter (detected by external scanner)
+    ini_content: () => token(prec(-1, /([^<\r\n]+|\r?\n)+/)),
 
     // ===== PHP Code Section =====
     php_section: ($) =>

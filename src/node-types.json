@@ -413,11 +413,7 @@
       "required": true,
       "types": [
         {
-          "type": "ini_section_header",
-          "named": true
-        },
-        {
-          "type": "ini_setting",
+          "type": "ini_content",
           "named": true
         },
         {
@@ -1985,11 +1981,7 @@
     "named": false
   },
   {
-    "type": "ini_section_header",
-    "named": true
-  },
-  {
-    "type": "ini_setting",
+    "type": "ini_content",
     "named": true
   },
   {
