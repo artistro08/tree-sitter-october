@@ -44,9 +44,9 @@ module.exports = grammar({
         $.section_delimiter
       )),
 
-    // INI content as a single leaf token for injection
-    // Simple pattern: match everything except < (stops at <?php or external scanner's ==)
-    ini_content: () => token(prec(-1, /([^<\r\n]+|\r?\n)+/)),
+    // INI content: match INI lines (start with word char or [) + blank lines
+    // Stops at lines starting with = (like ==) or < (like <?php)
+    ini_content: () => token(prec(-1, /([a-zA-Z_\[][^\r\n]*\r?\n|\r?\n)+/)),
 
     // ===== PHP Code Section =====
     php_section: ($) =>
