@@ -191,7 +191,7 @@ module.exports = grammar({
     output_directive: ($) =>
       seq(
         choice('{{', '{{-', '{{~'),
-        $._expression,
+        optional($._expression),
         choice('}}', '-}}', '~}}')
       ),
 
