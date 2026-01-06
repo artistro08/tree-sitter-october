@@ -63,13 +63,16 @@ module.exports = grammar({
         $.section_delimiter
       )),
 
-    // PHP code as a single leaf token (NO children) - required for Zed injection
-    // Zed only applies injections to nodes without child nodes
-    php_code: () => token(prec(-1, seq(
+    // PHP code with tags and content separated (like tree-sitter-blade)
+    php_code: ($) => seq(
       '<?php',
-      /([^?]+|\?[^>])*/,
+      optional($.php_only),
       optional('?>')
-    ))),
+    ),
+
+    // PHP content only (NO tags) - this is what gets injected
+    // tree-sitter-php's php_only dialect expects just the code, no <?php tag
+    php_only: () => token(prec(-1, /([^?]+|\?[^>])+/)),
 
     // ===== Twig Section =====
     twig_section: ($) =>
