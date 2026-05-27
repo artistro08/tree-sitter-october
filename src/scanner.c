@@ -2,7 +2,8 @@
 #include <wctype.h>
 
 enum TokenType {
-  SECTION_DELIMITER
+  SEPARATOR,
+  CHUNK
 };
 
 void *tree_sitter_october_external_scanner_create() {
@@ -21,46 +22,72 @@ static void advance(TSLexer *lexer) {
   lexer->advance(lexer, false);
 }
 
-// Check if we're at a section delimiter (==)
-static bool scan_section_delimiter(TSLexer *lexer) {
-  // Skip any leading whitespace/newlines
-  while (lexer->lookahead == ' ' || lexer->lookahead == '\t' ||
-         lexer->lookahead == '\n' || lexer->lookahead == '\r') {
-    advance(lexer);
-  }
-
-  // Must start with at least two equals signs
+// Matches a section separator: "==" or longer run of "=" at the start of a
+// line, followed by optional spaces/tabs and a newline (or EOF).
+// Must begin in column 0 - no leading whitespace tolerated, to keep agreement
+// with the chunk scanner.
+static bool scan_separator(TSLexer *lexer) {
   if (lexer->lookahead != '=') return false;
   advance(lexer);
-
   if (lexer->lookahead != '=') return false;
   advance(lexer);
-
-  // Consume any additional equals signs
-  while (lexer->lookahead == '=') {
+  while (lexer->lookahead == '=') advance(lexer);
+  while (lexer->lookahead == ' ' || lexer->lookahead == '\t') advance(lexer);
+  if (lexer->lookahead == '\r') advance(lexer);
+  if (lexer->lookahead == '\n') {
     advance(lexer);
+  } else if (!lexer->eof(lexer)) {
+    return false;
+  }
+  lexer->mark_end(lexer);
+  lexer->result_symbol = SEPARATOR;
+  return true;
+}
+
+// Consume opaque section content. Stops at the start of a line that begins
+// with "==" (a separator), or at EOF. Token must be non-empty.
+static bool scan_chunk(TSLexer *lexer) {
+  bool consumed = false;
+  bool at_line_start = true;  // we are at column 0 when scanner is first called for a chunk
+
+  for (;;) {
+    if (at_line_start && lexer->lookahead == '=') {
+      // Potential separator coming up - do not consume.
+      if (!consumed) return false;
+      lexer->result_symbol = CHUNK;
+      return true;
+    }
+
+    if (lexer->eof(lexer)) break;
+
+    int32_t c = lexer->lookahead;
+    advance(lexer);
+    consumed = true;
+
+    if (c == '\n') {
+      lexer->mark_end(lexer);
+      at_line_start = true;
+    } else if (c != '\r') {
+      at_line_start = false;
+    }
   }
 
-  // Skip trailing spaces and tabs (but not newlines yet)
-  while (lexer->lookahead == ' ' || lexer->lookahead == '\t') {
-    advance(lexer);
-  }
-
-  // Must be followed by newline, carriage return, or EOF
-  if (lexer->lookahead == '\n' || lexer->lookahead == '\r' || lexer->eof(lexer)) {
-    lexer->result_symbol = SECTION_DELIMITER;
+  if (consumed) {
     lexer->mark_end(lexer);
+    lexer->result_symbol = CHUNK;
     return true;
   }
-
   return false;
 }
 
 bool tree_sitter_october_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
-  // Only scan for section delimiter
-  if (valid_symbols[SECTION_DELIMITER]) {
-    return scan_section_delimiter(lexer);
+  // Separator has priority over chunk so empty sections (== immediately
+  // followed by ==) parse correctly.
+  if (valid_symbols[SEPARATOR] && scan_separator(lexer)) {
+    return true;
   }
-
+  if (valid_symbols[CHUNK]) {
+    return scan_chunk(lexer);
+  }
   return false;
 }
