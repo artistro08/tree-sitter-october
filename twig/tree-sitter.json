@@ -1,0 +1,38 @@
+{
+  "grammars": [
+    {
+      "name": "october_twig",
+      "camelcase": "OctoberTwig",
+      "scope": "october_twig",
+      "path": ".",
+      "file-types": [
+        "twig",
+        "html.twig",
+        "html.twig.js.css"
+      ],
+      "injection-regex": "october_twig"
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "license": "WTFPL",
+    "description": "Twig grammar for tree-sitter, adjusted for October CMS templates",
+    "authors": [
+      {
+        "name": "gbprod",
+        "email": "contact@gb-prod.fr"
+      }
+    ],
+    "links": {
+      "repository": "git+https://github.com/gbprod/tree-sitter-twig.git"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true
+  }
+}
